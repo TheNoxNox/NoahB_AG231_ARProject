@@ -16,7 +16,8 @@ public class Goblin_ro_ctrl : MonoBehaviour {
 	
 	
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		
 		anim = GetComponent<Animator>();
 		controller = GetComponent<CharacterController> ();
