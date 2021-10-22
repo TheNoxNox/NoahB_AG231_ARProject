@@ -8,6 +8,7 @@ public class Tower : MonoBehaviour
     protected float durabilityCurrent = 100f;
     public float DurabilityPercent { get { return durabilityCurrent / durabilityMax; } }
 
+    [SerializeField]
     public Vector3 location { get; private set; }
 
     private void Awake()

@@ -17,22 +17,56 @@ public class Goblin : MonoBehaviour
     public GobbAttackRange myAttackRange;
 
     private Tower reachedTower;
+    private bool hasReachedTower = false;
+
+    public float damage = 3f;
+    public int attackCycle = 3;
+
+    public float attackCdMax = 1.5f;
+    public float attackCooldown = 0f;
+    bool attackOnCooldown = false;
 
     private void Awake()
     {
         agent.SetDestination(GameManager.Main.theTower.location);
+        animator.SetInteger("battle", 1);//default idle
         animator.SetInteger("moving", 2);//run
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (hasReachedTower)
+        {
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        if (!attackOnCooldown)
+        {
+            animator.SetInteger("moving", Random.Range(3,5));
+            attackCooldown = attackCdMax;           
+            attackOnCooldown = true;
+        }
+        else
+        {
+            attackCooldown -= Time.deltaTime;
+            if(attackCooldown <= 0)
+            {
+                animator.SetInteger("moving", 0);
+                attackOnCooldown = false;
+            }
+        }
     }
 
     public void ReachedTower(Tower theTower)
     {
         reachedTower = theTower;
         agent.SetDestination(transform.position); // stop moving
+        animator.SetInteger("moving", 0);
+        hasReachedTower = true;
+        attackOnCooldown = true;
     }
 }

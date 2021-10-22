@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1539802738924628205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.869899, y: 1.718091, z: 3.3560586}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 3006779940993119633}
   - {fileID: 7038022378687753207}
@@ -72,6 +72,7 @@ MonoBehaviour:
   agent: {fileID: 4119003195648308637}
   speed: 6
   runSpeed: 1.7
+  myAttackRange: {fileID: 8365500253430158544}
 --- !u!1 &1582397036518281134
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,6 +83,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7038022378687753207}
   - component: {fileID: 6516088312440967424}
+  - component: {fileID: 8365500253430158544}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: Untagged
@@ -116,6 +118,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.17
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &8365500253430158544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582397036518281134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9647a072374372641a8ee1e1154aed9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Me: {fileID: -8424718934586442887}
 --- !u!1 &3006779940993303659
 GameObject:
   m_ObjectHideFlags: 0
