@@ -9,12 +9,11 @@ public class Tower : MonoBehaviour
     public float DurabilityPercent { get { return durabilityCurrent / durabilityMax; } }
 
     [SerializeField]
-    public Vector3 location { get; private set; }
+    public Vector3 location { get { return gameObject.transform.position; } }
 
     private void Awake()
     {
         durabilityCurrent = durabilityMax;
-        location = gameObject.transform.position;
     }
 
     public void TakeDamage(float damage)

@@ -26,9 +26,11 @@ public class Goblin : MonoBehaviour
     public float attackCooldown = 0f;
     bool attackOnCooldown = false;
 
+    private bool isDead = false;
+
     private void Awake()
     {
-        agent.SetDestination(GameManager.Main.theTower.location);
+        GameManager.Main.goblins.Add(this);
         animator.SetInteger("battle", 1);//default idle
         animator.SetInteger("moving", 2);//run
     }
@@ -36,9 +38,23 @@ public class Goblin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasReachedTower)
+        if (!isDead)
         {
-            Attack();
+            if (hasReachedTower)
+            {
+                Vector3 towardsTower = Vector3.RotateTowards(transform.forward, GameManager.Main.theTower.location, 2 * Mathf.PI, 0f);
+
+                gameObject.transform.rotation = Quaternion.LookRotation(towardsTower);
+                Attack();
+            }
+            else
+            {
+                agent.SetDestination(GameManager.Main.theTower.location);
+            }
+        }
+        else
+        {
+            agent.isStopped = true;
         }
     }
 
@@ -49,6 +65,7 @@ public class Goblin : MonoBehaviour
             animator.SetInteger("moving", Random.Range(3,5));
             attackCooldown = attackCdMax;           
             attackOnCooldown = true;
+            reachedTower.TakeDamage(damage);
         }
         else
         {
@@ -63,10 +80,36 @@ public class Goblin : MonoBehaviour
 
     public void ReachedTower(Tower theTower)
     {
-        reachedTower = theTower;
-        agent.SetDestination(transform.position); // stop moving
-        animator.SetInteger("moving", 0);
-        hasReachedTower = true;
-        attackOnCooldown = true;
+        if (!isDead)
+        {
+            reachedTower = theTower;
+            agent.SetDestination(transform.position); // stop moving
+            animator.SetInteger("moving", 0);
+            hasReachedTower = true;
+            attackOnCooldown = true;
+        }
+
+        
+    }
+
+    public void GetHit()
+    {
+        if (!isDead)
+        {
+            isDead = true;
+            GameManager.Main.goblins.Remove(this);
+            animator.SetInteger("battle", 0);
+            animator.SetInteger("moving", 13);
+        }
+        
+        //Destroy(this.gameObject);
+        StartCoroutine(WaitForDeath());
+    }
+
+    private IEnumerator WaitForDeath()
+    {
+        yield return new WaitForSeconds(2f);
+
+        Destroy(this.gameObject);
     }
 }
