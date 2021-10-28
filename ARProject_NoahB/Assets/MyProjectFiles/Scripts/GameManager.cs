@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum PlayerClickType
+{
+    PlaceTurret = 0,
+    KillGoblin = 1
+}
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
     protected float gametime = 0f;
+
+    public float GameTime { get { return gametime; } }
 
     public Tower theTower;
 
@@ -17,30 +24,87 @@ public class GameManager : MonoBehaviour
 
     public static float goblinRespawnMod = 0f;
 
+    public int points = 0;
+
+    public int maxTurrets = 5;
+
+    public int currentTurrets = 0;
+
+    public PlayerClickType touchType = PlayerClickType.KillGoblin;
+
+    public GameObject turretPrefab;
+
+    public bool gameIsOver = false;
+
+    public delegate void GameOverDelegate();
+
+    public static GameOverDelegate gameEnd;
+
     private void Awake()
     {
         if (Main) { Destroy(gameObject); }
         else { Main = this; }
+        Time.timeScale = 1f;
     }
 
     private void Update()
     {
-        gametime += Time.deltaTime;
+        if (!gameIsOver)
+        {
+            gametime += Time.deltaTime;
 
-        goblinRespawnMod = gametime / 50;
+            goblinRespawnMod = gametime / 30;
+        }
+        
     }
 
     public void TouchRaycast(Ray touch)
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(touch,out hit))
+        switch (touchType)
         {
-            if (hit.collider.gameObject.CompareTag("Goblin"))
-            {
-                GobbAttackRange gob = hit.collider.gameObject.GetComponent<GobbAttackRange>();
-                if (gob) { gob.Me.GetHit(); }
-            }
+            case PlayerClickType.KillGoblin:
+                if (Physics.Raycast(touch, out hit))
+                {
+                    if (hit.collider.gameObject.CompareTag("Goblin"))
+                    {
+                        GobbAttackRange gob = hit.collider.gameObject.GetComponent<GobbAttackRange>();
+                        if (gob) { gob.Me.GetHit(); }
+                    }
+                }
+                break;
+            case PlayerClickType.PlaceTurret:
+                if(Physics.Raycast(touch,out hit))
+                {
+                    if (hit.collider.gameObject.CompareTag("ValidGround") && currentTurrets < maxTurrets)
+                    {
+                        Instantiate(turretPrefab, hit.point, Quaternion.identity);
+                        currentTurrets++;
+                        points -= 15;
+                    }
+                    SetTouchType(PlayerClickType.KillGoblin);
+                }
+                break;
         }
+    }
+
+    //public void ARTouchRaycast()
+
+    public void GetPoint()
+    {
+        points++;
+    }
+
+    public void SetTouchType(PlayerClickType type)
+    {
+        touchType = type;
+    }
+
+    public void GameOver()
+    {
+        //Time.timeScale = 0f;
+        gameEnd?.Invoke();
+        gameIsOver = true;
     }
 }

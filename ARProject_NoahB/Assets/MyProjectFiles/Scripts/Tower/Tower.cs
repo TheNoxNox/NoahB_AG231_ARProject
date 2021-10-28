@@ -5,6 +5,7 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     public float durabilityMax = 100f;
+    [SerializeField]
     protected float durabilityCurrent = 100f;
     public float DurabilityPercent { get { return durabilityCurrent / durabilityMax; } }
 
@@ -20,9 +21,9 @@ public class Tower : MonoBehaviour
     {
         durabilityCurrent -= damage;
 
-        if(durabilityCurrent <= 0)
+        if(durabilityCurrent <= 0 && !GameManager.Main.gameIsOver)
         {
-
+            GameManager.Main.GameOver();
         }
     }
 

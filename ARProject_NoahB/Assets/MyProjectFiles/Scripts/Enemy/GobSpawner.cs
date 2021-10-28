@@ -20,12 +20,16 @@ public class GobSpawner : MonoBehaviour
 
     private void Update()
     {
-        spawnCooldown -= Time.deltaTime;
-        if(spawnCooldown <= 0)
+        if (!GameManager.Main.gameIsOver)
         {
-            Instantiate(goblinPrefab, transform.position, transform.rotation);
-            spawnCooldown = Random.Range(spawnCD_Min, spawnCD_Max) - GameManager.goblinRespawnMod;
-            if(spawnCooldown < spawnCD_Min_Abs) { spawnCooldown = spawnCD_Min_Abs; }
+            spawnCooldown -= Time.deltaTime;
+            if (spawnCooldown <= 0)
+            {
+                Instantiate(goblinPrefab, transform.position, transform.rotation);
+                spawnCooldown = Random.Range(spawnCD_Min, spawnCD_Max) - GameManager.goblinRespawnMod;
+                if (spawnCooldown < spawnCD_Min_Abs) { spawnCooldown = spawnCD_Min_Abs; }
+            }
         }
+        
     }
 }

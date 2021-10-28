@@ -33,13 +33,14 @@ public class Goblin : MonoBehaviour
         GameManager.Main.goblins.Add(this);
         animator.SetInteger("battle", 1);//default idle
         animator.SetInteger("moving", 2);//run
+        GameManager.gameEnd += this.SetGameOverLogic;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isDead)
-        {
+        if (!isDead && !GameManager.Main.gameIsOver)
+        {           
             if (hasReachedTower)
             {
                 Vector3 towardsTower = Vector3.RotateTowards(transform.forward, GameManager.Main.theTower.location, 2 * Mathf.PI, 0f);
@@ -100,10 +101,11 @@ public class Goblin : MonoBehaviour
             GameManager.Main.goblins.Remove(this);
             animator.SetInteger("battle", 0);
             animator.SetInteger("moving", 13);
+            StartCoroutine(WaitForDeath());
         }
         
         //Destroy(this.gameObject);
-        StartCoroutine(WaitForDeath());
+        //StartCoroutine(WaitForDeath());
     }
 
     private IEnumerator WaitForDeath()
@@ -111,5 +113,12 @@ public class Goblin : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         Destroy(this.gameObject);
+    }
+
+    private void SetGameOverLogic()
+    {
+        //animator.SetInteger("moving", 5);
+        animator.SetInteger("moving", 0);
+        animator.SetInteger("moving", 5);
     }
 }
