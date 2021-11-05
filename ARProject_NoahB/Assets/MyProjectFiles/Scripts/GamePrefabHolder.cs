@@ -10,17 +10,27 @@ public class GamePrefabHolder : MonoBehaviour
 
     public GameObject gamePrefab;
 
+    public GameObject theGame;
+
     public ARSession session;
+
+    public ARPlaneManager planeMan;
 
     private void Awake()
     {
         if (!Main)
         {
             Main = this;
+            session.enabled = true;
         }
         else
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void ToggleSession(bool toggle)
+    {
+        session.enabled = toggle;
     }
 }

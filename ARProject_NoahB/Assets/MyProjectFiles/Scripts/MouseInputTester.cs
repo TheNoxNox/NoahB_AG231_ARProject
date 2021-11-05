@@ -18,7 +18,7 @@ public class MouseInputTester : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             GameManager.Main.TouchRaycast(ray);
         }
-        if(Input.touchCount == 1)
+        if(Input.touchCount >= 1)
         {
             Touch touch = Input.GetTouch(0);
 

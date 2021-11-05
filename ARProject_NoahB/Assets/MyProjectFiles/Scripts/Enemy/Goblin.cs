@@ -99,6 +99,7 @@ public class Goblin : MonoBehaviour
         {
             isDead = true;
             GameManager.Main.goblins.Remove(this);
+            GameManager.Main.points++;
             animator.SetInteger("battle", 0);
             animator.SetInteger("moving", 13);
             StartCoroutine(WaitForDeath());
@@ -118,7 +119,15 @@ public class Goblin : MonoBehaviour
     private void SetGameOverLogic()
     {
         //animator.SetInteger("moving", 5);
+        //animator.SetInteger("battle", 0);
         animator.SetInteger("moving", 0);
+        StartCoroutine(SetWinAnimation());
+    }
+
+    private IEnumerator SetWinAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);
+
         animator.SetInteger("moving", 5);
     }
 }
